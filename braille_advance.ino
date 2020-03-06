@@ -27,7 +27,7 @@ void setup()
     Serial.begin(9600);  
 }  
 
-void loop()
+void main()
 {
   for(int i = 0; i < sizeof(data); i++)
   {
@@ -35,72 +35,58 @@ void loop()
     for (int j=0 ; j<sizeof(ascii); j++)
     {
       if(input == ascii[j])
-      { 
+      {
         output=binary[j];
         if( input <=65 || input<91 )
         {
           //capital letters
           capital_sign = 1;
-          
-//          int cap_out[6] = {0,0,0,0,0,1};
         }
         else if(input <=97 || input<123)
         {
           //small letters 
           capital_sign =0;
-         }
-         else if(input<= 48 || input<57)
-         {
-            //digits
-            numerical_sign=1;
-//            int num_out[6]={0,1,0,1,1,1};
-            
-         }
-         else
-         {
-          numerical_sign=0;
-          capital_sign=0;
-         }
-         
-         while(k<6)
-         {
-          if( capital_sign == 1)
-          {
-           digitalWrite(6, HIGH);
-            delay(1000);
-           
-            k=0;
-            capital_sign=0;
-          
-           
-          }
-          
-          else if(capital_sign ==0 || numerical_sign ==0)
-          {
-           if(output[k] == 1)
-           {
-            digitalWrite(k+2, HIGH);
-            k++;
-           }
-           else
-           {
-            digitalWrite(k+2, LOW);
-            k++;
-           } 
-           }
+        }
+        else if(input<= 48 || input<57)
+        {
+          //digits
+          numerical_sign=1;            
+        }
+        else
+        {
+        numerical_sign=0;
+        capital_sign=0;
+        }
 
-           else if( numerical_sign == 1)
+        if( capital_sign == 1)
+        {
+          digitalWrite(6, HIGH);
+          delay(1000);
+          capital_sign=0;
+        }
+        else if( numerical_sign == 1)
+        {
+          digitalWrite(2, HIGH);
+          digitalWrite(4, HIGH);
+          digitalWrite(5, HIGH);
+          digitalWrite(6, HIGH);
+          numerical_sign=0;
+        }
+        else if(capital_sign ==0 && numerical_sign ==0)
+        {
+          for(k=0;k<6;k++)
           {
-            digitalWrite(2, HIGH);
-            digitalWrite(4, HIGH);
-            digitalWrite(5, HIGH);
-            digitalWrite(6, HIGH);
-           
-       
-            k=0;
-            numerical_sign=0;
+            if(output[k] == 1)
+            {
+              digitalWrite(k+2, HIGH);
+              k++;
+            }
+            else
+            {
+              digitalWrite(k+2, LOW);
+              k++;
+            }
           }
-          
         }
         delay(2000); 
         break;
